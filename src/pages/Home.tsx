@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useAuth } from "@/hooks/useAuth";
 import { 
   BookOpen, 
   Users, 
@@ -9,10 +10,13 @@ import {
   Sparkles, 
   PlayCircle,
   ArrowRight,
-  Star
+  Star,
+  User
 } from "lucide-react";
 
 const Home = () => {
+  const { isAuthenticated, user } = useAuth();
+
   const features = [
     {
       icon: BookOpen,
@@ -56,22 +60,24 @@ const Home = () => {
           </div>
           
           <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6 animate-bloom">
-            Let Your Language
+            {isAuthenticated ? `Welcome back, ${user?.name?.split(' ')[0]}!` : 'Let Your Language'}
             <span className="block bg-gradient-primary bg-clip-text text-transparent">
-              Blossom
+              {isAuthenticated ? 'Continue Learning' : 'Blossom'}
             </span>
           </h1>
           
           <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto animate-bloom">
-            Master essential words and phrases in 6 beautiful Indian languages. 
-            Perfect for beginners who want to connect with India's rich linguistic heritage.
+            {isAuthenticated 
+              ? 'Continue your journey mastering essential words and phrases in beautiful Indian languages.'
+              : 'Master essential words and phrases in 6 beautiful Indian languages. Perfect for beginners who want to connect with India\'s rich linguistic heritage.'
+            }
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-bloom">
             <Button variant="hero" asChild>
               <Link to="/languages">
                 <PlayCircle className="h-5 w-5" />
-                Start Learning
+                {isAuthenticated ? 'Continue Learning' : 'Start Learning'}
               </Link>
             </Button>
             <Button variant="outline" size="lg" asChild>

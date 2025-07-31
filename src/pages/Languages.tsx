@@ -13,136 +13,73 @@ import {
   Globe,
   Sparkles
 } from "lucide-react";
+import { languageData } from "@/data/languageData";
+import LanguageLearning from "@/components/LanguageLearning";
 
 const Languages = () => {
-  const [selectedLanguage, setSelectedLanguage] = useState(null);
+  const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
+  const [currentLanguageId, setCurrentLanguageId] = useState<string | null>(null);
 
-  const languages = [
-    {
-      id: "hindi",
-      name: "Hindi",
-      native: "हिन्दी",
-      description: "India's most widely spoken language, official language of India",
-      script: "Devanagari",
-      speakers: "600M+",
-      difficulty: "Beginner",
-      color: "from-orange-400 to-red-500",
-      bgColor: "bg-orange-50",
-      textColor: "text-orange-800",
-      words: 52,
-      phrases: 8,
-      features: ["Simple grammar", "Phonetic script", "Rich vocabulary"],
-      sampleWords: [
-        { hindi: "नमस्ते", pronunciation: "Namaste", meaning: "Hello/Goodbye" },
-        { hindi: "धन्यवाद", pronunciation: "Dhanyawad", meaning: "Thank you" },
-        { hindi: "पानी", pronunciation: "Paani", meaning: "Water" }
-      ]
-    },
-    {
-      id: "kannada",
-      name: "Kannada",
-      native: "ಕನ್ನಡ",
-      description: "Classical language of Karnataka, known for its beautiful script",
-      script: "Kannada",
-      speakers: "45M+",
-      difficulty: "Beginner",
-      color: "from-red-400 to-pink-500",
-      bgColor: "bg-red-50",
-      textColor: "text-red-800",
-      words: 50,
-      phrases: 10,
-      features: ["Unique script", "Melodious sounds", "Cultural richness"],
-      sampleWords: [
-        { hindi: "ನಮಸ್ಕಾರ", pronunciation: "Namaskara", meaning: "Hello" },
-        { hindi: "ಧನ್ಯವಾದ", pronunciation: "Dhanyavada", meaning: "Thank you" },
-        { hindi: "ನೀರು", pronunciation: "Neeru", meaning: "Water" }
-      ]
-    },
-    {
-      id: "marathi",
-      name: "Marathi",
-      native: "मराठी",
-      description: "Language of Maharashtra, shares script with Hindi",
-      script: "Devanagari",
-      speakers: "83M+",
-      difficulty: "Beginner",
-      color: "from-green-400 to-emerald-500",
-      bgColor: "bg-green-50",
-      textColor: "text-green-800",
-      words: 48,
-      phrases: 12,
-      features: ["Similar to Hindi", "Rich literature", "Easy transition"],
-      sampleWords: [
-        { hindi: "नमस्कार", pronunciation: "Namaskar", meaning: "Hello" },
-        { hindi: "धन्यवाद", pronunciation: "Dhanyawad", meaning: "Thank you" },
-        { hindi: "पाणी", pronunciation: "Paani", meaning: "Water" }
-      ]
-    },
-    {
-      id: "tamil",
-      name: "Tamil",
-      native: "தமிழ்",
-      description: "Ancient Dravidian language with rich literary tradition",
-      script: "Tamil",
-      speakers: "75M+",
-      difficulty: "Beginner",
-      color: "from-blue-400 to-indigo-500",
-      bgColor: "bg-blue-50",
-      textColor: "text-blue-800",
-      words: 55,
-      phrases: 5,
-      features: ["Ancient heritage", "Pure vocabulary", "Distinct script"],
-      sampleWords: [
-        { hindi: "வணக்கம்", pronunciation: "Vanakkam", meaning: "Hello" },
-        { hindi: "நன்றி", pronunciation: "Nandri", meaning: "Thank you" },
-        { hindi: "தண்ணீர்", pronunciation: "Thanneer", meaning: "Water" }
-      ]
-    },
-    {
-      id: "telugu",
-      name: "Telugu",
-      native: "తెలుగు",
-      description: "Sweet language of Andhra Pradesh and Telangana",
-      script: "Telugu",
-      speakers: "82M+",
-      difficulty: "Beginner",
-      color: "from-purple-400 to-violet-500",
-      bgColor: "bg-purple-50",
-      textColor: "text-purple-800",
-      words: 53,
-      phrases: 7,
-      features: ["Melodious tone", "Rounded script", "Cultural depth"],
-      sampleWords: [
-        { hindi: "నమస్కారం", pronunciation: "Namaskaram", meaning: "Hello" },
-        { hindi: "ధన్యవాదాలు", pronunciation: "Dhanyavadalu", meaning: "Thank you" },
-        { hindi: "నీళ్లు", pronunciation: "Neellu", meaning: "Water" }
-      ]
-    },
-    {
-      id: "malayalam",
-      name: "Malayalam",
-      native: "മലയാളം",
-      description: "Language of Kerala, known for its complex script",
-      script: "Malayalam",
-      speakers: "38M+",
-      difficulty: "Beginner",
-      color: "from-pink-400 to-rose-500",
-      bgColor: "bg-pink-50",
-      textColor: "text-pink-800",
-      words: 51,
-      phrases: 9,
-      features: ["Unique curves", "Expressive sounds", "Literary richness"],
-      sampleWords: [
-        { hindi: "നമസ്കാരം", pronunciation: "Namaskaram", meaning: "Hello" },
-        { hindi: "നന്ദി", pronunciation: "Nandi", meaning: "Thank you" },
-        { hindi: "വെള്ളം", pronunciation: "Vellam", meaning: "Water" }
-      ]
-    }
-  ];
+  // If a language is selected for learning, show the learning component
+  if (currentLanguageId) {
+    return (
+      <LanguageLearning
+        languageId={currentLanguageId}
+        onBack={() => setCurrentLanguageId(null)}
+      />
+    );
+  }
+
+  // Transform language data for display
+  const languages = languageData.map(lang => ({
+    id: lang.id,
+    name: lang.name,
+    native: lang.native,
+    description: `Learn ${lang.name} with ${lang.words.length} essential words and phrases`,
+    script: lang.script,
+    speakers: lang.id === 'hindi' ? '600M+' : 
+              lang.id === 'marathi' ? '83M+' :
+              lang.id === 'telugu' ? '82M+' :
+              lang.id === 'tamil' ? '75M+' :
+              lang.id === 'kannada' ? '45M+' :
+              lang.id === 'malayalam' ? '38M+' : '50M+',
+    difficulty: "Beginner",
+    color: lang.id === 'hindi' ? "from-orange-400 to-red-500" :
+           lang.id === 'kannada' ? "from-red-400 to-pink-500" :
+           lang.id === 'marathi' ? "from-green-400 to-emerald-500" :
+           lang.id === 'tamil' ? "from-blue-400 to-indigo-500" :
+           lang.id === 'telugu' ? "from-purple-400 to-violet-500" :
+           lang.id === 'malayalam' ? "from-pink-400 to-rose-500" : "from-gray-400 to-gray-500",
+    bgColor: lang.id === 'hindi' ? "bg-orange-50" :
+             lang.id === 'kannada' ? "bg-red-50" :
+             lang.id === 'marathi' ? "bg-green-50" :
+             lang.id === 'tamil' ? "bg-blue-50" :
+             lang.id === 'telugu' ? "bg-purple-50" :
+             lang.id === 'malayalam' ? "bg-pink-50" : "bg-gray-50",
+    textColor: lang.id === 'hindi' ? "text-orange-800" :
+               lang.id === 'kannada' ? "text-red-800" :
+               lang.id === 'marathi' ? "text-green-800" :
+               lang.id === 'tamil' ? "text-blue-800" :
+               lang.id === 'telugu' ? "text-purple-800" :
+               lang.id === 'malayalam' ? "text-pink-800" : "text-gray-800",
+    words: lang.words.length,
+    phrases: 0, // We don't have separate phrases, just words
+    features: lang.id === 'hindi' ? ["Simple grammar", "Phonetic script", "Rich vocabulary"] :
+              lang.id === 'kannada' ? ["Unique script", "Melodious sounds", "Cultural richness"] :
+              lang.id === 'marathi' ? ["Similar to Hindi", "Rich literature", "Easy transition"] :
+              lang.id === 'tamil' ? ["Ancient heritage", "Pure vocabulary", "Distinct script"] :
+              lang.id === 'telugu' ? ["Melodious tone", "Rounded script", "Cultural depth"] :
+              lang.id === 'malayalam' ? ["Unique curves", "Expressive sounds", "Literary richness"] :
+              ["Rich culture", "Beautiful script", "Easy to learn"],
+    sampleWords: lang.words.slice(0, 3).map(word => ({
+      hindi: word.native,
+      pronunciation: word.pronunciation,
+      meaning: word.meaning
+    }))
+  }));
 
   const startLearning = (language) => {
-    // This would navigate to the flashcard component
-    alert(`Starting ${language.name} lessons! (Flashcard component to be implemented)`);
+    setCurrentLanguageId(language.id);
   };
 
   return (
@@ -196,9 +133,9 @@ const Languages = () => {
                 <div className="text-center">
                   <div className="flex items-center justify-center gap-1 mb-1">
                     <BookOpen className="h-4 w-4 text-primary" />
-                    <span className="text-sm font-medium text-foreground">{language.words + language.phrases}</span>
+                    <span className="text-sm font-medium text-foreground">{language.words}</span>
                   </div>
-                  <div className="text-xs text-muted-foreground">Lessons</div>
+                  <div className="text-xs text-muted-foreground">Words</div>
                 </div>
               </div>
 
